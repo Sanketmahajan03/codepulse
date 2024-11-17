@@ -6,38 +6,46 @@ import { EditCategoryComponent } from './Features/Categories/edit-category/edit-
 import { BlogPostComponent } from './Features/Blogposts/blog-post/blog-post.component';
 import { BlogPostsAddComponent } from './Features/Blogposts/blog-posts-add/blog-posts-add.component';
 import { EditBlogPostComponent } from './Features/Blogposts/edit-blog-post/edit-blog-post.component';
-
+import { HomeComponent } from './Features/Public/home/home.component';
+import { BlogDetailsComponent } from './Features/Public/blog-details/blog-details.component';
 
 const routes: Routes = [
   {
-    path:"admin/categories",
-    component:CategoryListComponent
+    path: '',
+    component: HomeComponent,
   },
   {
-    path:"admin/categories/add",
-    component:AddCategoriesComponent
-  }
-  ,
-  {
-    path:"admin/categories/:id",
-    component:EditCategoryComponent
+    path: 'blog/:url',
+    component: BlogDetailsComponent
   },
   {
-    path:"admin/blogposts",
-    component:BlogPostComponent
+    path: 'admin/categories',
+    component: CategoryListComponent,
   },
   {
-    path:"admin/blogposts/add",
-    component:BlogPostsAddComponent
+    path: 'admin/categories/add',
+    component: AddCategoriesComponent,
   },
   {
-    path:"admin/blogposts/:id",
-    component:EditBlogPostComponent
-  }
+    path: 'admin/categories/:id',
+    component: EditCategoryComponent,
+  },
+  {
+    path: 'admin/blogposts',
+    component: BlogPostComponent,
+  },
+  {
+    path: 'admin/blogposts/add',
+    component: BlogPostsAddComponent,
+  },
+  {
+    path: 'admin/blogposts/:id',
+    component: EditBlogPostComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
