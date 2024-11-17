@@ -6,6 +6,7 @@ import { BlogPost } from '../Model/blog-post.model';
 import { CategoryServiceService } from 'src/app/Services/category-service.service';
 import { Category } from 'src/app/Models/category.model';
 import { UpdateBlogPost } from '../Model/update.blogpost.model';
+import { ImageService } from 'src/app/shared/components/image-selector/image.service';
 
 
 @Component({
@@ -24,12 +25,14 @@ export class EditBlogPostComponent implements OnInit, OnDestroy {
   routeSubscription?:Subscription;
   updateBlogPostSubscription?: Subscription;
   getBlogPostSubscription?: Subscription;
-  DeleteBlogPostSubscription?: Subscription;
+  deleteBlogPostSubscription?: Subscription;
+  imageSelectSubscription?: Subscription;
 
   constructor(private route: ActivatedRoute,
     private blogPostServices: BlogPostsService,
     private blogCategories : CategoryServiceService,
-    private router: Router
+    private router: Router,
+    private imageService: ImageService
   ) {
 
   }
@@ -42,13 +45,24 @@ export class EditBlogPostComponent implements OnInit, OnDestroy {
         // get blogPost Data
 
         if(this.id){
-          var DeleteBlogPostSubscription = this.blogPostServices.GetBlogPostById(this.id).subscribe( {
+          var deleteBlogPostSubscription = this.blogPostServices.GetBlogPostById(this.id).subscribe( {
             next: (responce) =>{
               this.model = responce;
               this.selectedCategories = responce.categories.map(x => x.id);
             }
           })
         }
+
+       this.imageSelectSubscription =  this.imageService.onSelectImage()
+        .subscribe({
+          next: (responce) =>{
+            if(this.model) {
+              this.model.featuredUrlImage = responce.url;
+              this.isImageSelectorVisible = false;
+            }
+          }
+        })
+
       }
     })
   }
@@ -99,7 +113,8 @@ export class EditBlogPostComponent implements OnInit, OnDestroy {
     this.routeSubscription?.unsubscribe();
     this.updateBlogPostSubscription?.unsubscribe();
     this.getBlogPostSubscription?.unsubscribe();
-    this.DeleteBlogPostSubscription?.unsubscribe();
+    this.deleteBlogPostSubscription?.unsubscribe();
+    this.imageSelectSubscription?.unsubscribe();
   }
 
 }
