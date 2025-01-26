@@ -1,25 +1,58 @@
 <div class="container">
   <h1 class="mt-3">Category List</h1>
 
-  <div class="d-flex justify-content-end mt-3">
+  <div class="d-flex justify-content-between mt-3">
+    <div class="d-flex" >
+      <input type="text" class="form-control" #queryText />
+      <button class="btn btn-warning ms-2" (click)="OnSearch(queryText.value)">Search</button>
+    </div>
+
     <button [routerLink]="['/admin/categories/add']" class="btn btn-primary">
       Add Category
     </button>
   </div>
 
-  <ng-container *ngIf="categories">
+  <ng-container *ngIf="categories$">
 
     <table class="table table-bordered mt-3">
         <thead>
           <tr>
             <th >Id</th>
-            <th >Name</th>
-            <th >Url Handle</th>
+            <th >
+              Name
+              <span>
+                <span>
+                  <button type="button" class="btn btn-light" (click)="Sort('name','asc')">
+                    <i class="bi bi-arrow-up"></i>
+                  </button>
+                </span>
+                <span>
+                  <button type="button" class="btn btn-light" (click)="Sort('name','desc')">
+                    <i class="bi bi-arrow-down"></i>
+                  </button>
+                </span>
+              </span>
+            </th>
+            <th>
+              Url Handle
+              <span>
+                <span>
+                  <button type="button" class="btn btn-light" (click)="Sort('Url','asc')">
+                    <i class="bi bi-arrow-up"></i>
+                  </button>
+                </span>
+                <span>
+                  <button type="button" class="btn btn-light" (click)="Sort('Url','desc')">
+                    <i class="bi bi-arrow-down"></i>
+                  </button>
+                </span>
+              </span>
+            </th>
             <th > </th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let category of categories">
+          <tr *ngFor="let category of categories$ | async">
             <td >{{category.id}} </td>
             <td >{{category.name}} </td>
             <td >{{category.urlHandle}} </td>
@@ -29,6 +62,18 @@
           </tr>
         </tbody>
       </table>
+
+
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item"><a class="page-link" (click)="OnPreviousPage()" >Previous</a></li>
+
+          <li *ngFor="let item of list;let index = index" class="page-item" (click)="GetPage(index + 1)">
+            <a class="page-link">{{index + 1}}</a></li>
+    
+          <li class="page-item"><a class="page-link" tabindex="0" (click)="OnNextPage()">Next</a></li>
+        </ul>
+      </nav>
 
   </ng-container>
 </div>
