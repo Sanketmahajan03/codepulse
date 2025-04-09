@@ -6,38 +6,58 @@ import { EditCategoryComponent } from './Features/Categories/edit-category/edit-
 import { BlogPostComponent } from './Features/Blogposts/blog-post/blog-post.component';
 import { BlogPostsAddComponent } from './Features/Blogposts/blog-posts-add/blog-posts-add.component';
 import { EditBlogPostComponent } from './Features/Blogposts/edit-blog-post/edit-blog-post.component';
-
+import { HomeComponent } from './Features/Public/home/home.component';
+import { BlogDetailsComponent } from './Features/Public/blog-details/blog-details.component';
+import { LoginComponent } from './Features/Auth/login/login.component';
+import { authGuard } from './Features/Auth/guards/auth.guard';
 
 const routes: Routes = [
   {
-    path:"admin/categories",
-    component:CategoryListComponent
+    path: '',
+    component: HomeComponent,
   },
   {
-    path:"admin/categories/add",
-    component:AddCategoriesComponent
-  }
-  ,
-  {
-    path:"admin/categories/:id",
-    component:EditCategoryComponent
+    path: 'login',
+    component: LoginComponent
   },
   {
-    path:"admin/blogposts",
-    component:BlogPostComponent
+    path: 'blog/:url',
+    component: BlogDetailsComponent
   },
   {
-    path:"admin/blogposts/add",
-    component:BlogPostsAddComponent
+    path: 'admin/categories',
+    component: CategoryListComponent,
+    canActivate: [authGuard]
   },
   {
-    path:"admin/blogposts/:id",
-    component:EditBlogPostComponent
-  }
+    path: 'admin/categories/add',
+    component: AddCategoriesComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'admin/categories/:id',
+    component: EditCategoryComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'admin/blogposts',
+    component: BlogPostComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'admin/blogposts/add',
+    component: BlogPostsAddComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'admin/blogposts/:id',
+    component: EditBlogPostComponent,
+    canActivate: [authGuard]
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

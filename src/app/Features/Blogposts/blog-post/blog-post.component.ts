@@ -17,7 +17,6 @@ export class BlogPostComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    debugger
    this.blogPosts$ = this.blogPostServices.GetAllBlogPost();
   }
 }
