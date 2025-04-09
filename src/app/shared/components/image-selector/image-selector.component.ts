@@ -30,7 +30,6 @@ export class ImageSelectorComponent implements OnInit{
   }
 
   uploadImage(): void{
-    debugger;
     if(this.file && this.fileName !== '' && this.title !== '') {
       //images services to upload image
       this.imageServeice.uploadImage(this.file,this.fileName,this.title)

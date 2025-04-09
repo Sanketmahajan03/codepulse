@@ -29,7 +29,7 @@ export class NavbarComponent implements OnInit {
 
   OnLogout(): void {
     this.loginService.logout();
-    this.router.navigateByUrl('/');
+    this.router.navigateByUrl('/login');
     
   }
 

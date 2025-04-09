@@ -7,41 +7,73 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
-
+  errorMessage: string = '';
+  isLoading: boolean = false;
+  // In your component class
+  showPassword = false;
   model: LoginRequest;
 
-  constructor(private loginService: LoginService,
+  constructor(
+    private loginService: LoginService,
     private cookieService: CookieService,
     private router: Router
-  )
-  {
-    this.model= {
+  ) {
+    this.model = {
       email: '',
-      password: ''
+      password: '',
     };
   }
 
-  onFormSubmit(): void{
-    this.loginService.login(this.model)
-    .subscribe({
-      next:(responce)=>{
+  onFormSubmit(): void {
+    this.errorMessage = '';
+    this.isLoading = true;
+    this.loginService.login(this.model).subscribe({
+      next: (responce) => {
         //set cookie sevices
-        this.cookieService.set('Authorization', `Bearer ${responce.token}`,
-          undefined,'/',undefined, true,'Strict');
+        this.cookieService.set(
+          'Authorization',
+          `Bearer ${responce.token}`,
+          undefined,
+          '/',
+          undefined,
+          true,
+          'Strict'
+        );
 
         //Set user
         this.loginService.setUser({
           email: responce.email,
-          roles: responce.roles
+          roles: responce.roles,
         });
-        
-        
-        //Redirect to home page
+
+        setTimeout(() => {
+           //Redirect to home page
         this.router.navigateByUrl('/');
-      }
-    })
+        this.isLoading = false;
+        }, 1500);
+       
+      },
+
+      error: (err) => {
+        this.isLoading = false;
+        if (err.status === 400) {
+          this.errorMessage =
+            err.error?.errors?.['']?.[0] || 'Invalid login attempt';
+        } else {
+          this.errorMessage = 'Something went wrong, please try again later';
+        }
+      },
+    });
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+    const passwordInput = document.getElementById(
+      'password'
+    ) as HTMLInputElement;
+    passwordInput.type = this.showPassword ? 'text' : 'password';
   }
 }
